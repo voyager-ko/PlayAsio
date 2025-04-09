@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <algorithm>
+#include "sndfile.h"
+#include "fftw3.h"
 #include "asiosys.h"
 #include "asio.h"
 #include "asiodrivers.h"
