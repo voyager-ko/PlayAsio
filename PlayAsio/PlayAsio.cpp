@@ -10,6 +10,7 @@
 using namespace std;
 
 #define ASIO_DRIVER_NAME    "ASIO4ALL v2"
+int test = 0;
 
 // Make a file
 ofstream outFile;
