@@ -104,7 +104,7 @@
       <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\banan\source\repos\PlayAsio\PlayAsio;C:\local_lib\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\banan\source\repos\PlayAsio\PlayAsio;C:\local_lib\include;C:\local_lib\eigen</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
@@ -112,7 +112,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libfftw3-3.lib;sndfile.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\local_lib\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\local_lib\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

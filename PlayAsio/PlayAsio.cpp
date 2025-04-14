@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#if 0 echo
+#include <iostream>
 #include <vector>
 #include <fstream>
 #include <algorithm>
@@ -405,4 +406,74 @@ int main()
 	}
 
 	return 0;
+
 }
+#endif
+#if 1
+#include <iostream>
+#include <sndfile.h>
+#include <fftw3.h>
+#include <vector>
+using namespace std;
+
+int main() {
+	
+	int f_low = 300;
+	int f_high = 1500;
+
+	
+	const char* name = "audio/Hi.wav";
+	SF_INFO info;
+	SNDFILE* infile = sf_open(name, SFM_READ, &info);
+
+	if (!infile) {
+		cerr << "can't read file" << endl;
+		return 0;
+	}
+	vector<double> buffer(info.frames * info.channels);
+	sf_read_double(infile, buffer.data(), info.frames);
+	int x_size = buffer.size();
+
+	fftw_complex* in, * out;
+	fftw_plan plan;
+	in = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * x_size);
+	out = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * x_size);
+	plan = fftw_plan_dft_1d(x_size, in, out, FFTW_FORWARD, FFTW_ESTIMATE);
+
+	for (int i = 0; i < x_size; i++) {
+		in[i][0] = buffer[i];
+	}
+
+	fftw_execute(plan);
+
+
+	int fs = info.samplerate;
+
+
+	int k_low = f_low * fs / x_size;
+	int k_high = f_high * fs / x_size;
+	cout << "k_low" << k_low << endl;
+	cout << "k_high" << k_high << endl;
+
+
+	double SumEnergy = 0.0;
+
+	for (int i = k_low; i <= k_high; i++) {
+		SumEnergy += out[i][0] * out[i][0] + out[i][1] * out[i][1];
+	}
+
+	double ok = 10000;
+	if (SumEnergy < ok) {
+		cout << "手をたたく音です" << endl;
+	}
+	else {
+		cout << "人の声です" << endl;
+	}
+
+	fftw_destroy_plan(plan);
+	fftw_free(in);
+	fftw_free(out);
+
+	return 0;
+}
+#endif
