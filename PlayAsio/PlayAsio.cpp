@@ -422,7 +422,7 @@ int main() {
 	int f_high = 1500;
 
 	
-	const char* name = "audio/Hi.wav";
+	const char* name = "audio/Hello.wav";
 	SF_INFO info;
 	SNDFILE* infile = sf_open(name, SFM_READ, &info);
 
@@ -462,7 +462,8 @@ int main() {
 		SumEnergy += out[i][0] * out[i][0] + out[i][1] * out[i][1];
 	}
 
-	double ok = 10000;
+	cout << SumEnergy << endl;
+	double ok = 100000;
 	if (SumEnergy < ok) {
 		cout << "手をたたく音です" << endl;
 	}
