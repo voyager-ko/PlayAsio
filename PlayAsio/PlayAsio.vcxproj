@@ -137,6 +137,9 @@
     <ClCompile Include="asiolist.cpp" />
     <ClCompile Include="combase.cpp" />
     <ClCompile Include="debugmessage.cpp" />
+    <ClCompile Include="DriverController.cpp" />
+    <ClCompile Include="DriverInfo.cpp" />
+    <ClCompile Include="FileController.cpp" />
     <ClCompile Include="PlayAsio.cpp" />
     <ClCompile Include="register.cpp" />
   </ItemGroup>
@@ -148,6 +151,9 @@
     <ClInclude Include="asiolist.h" />
     <ClInclude Include="asiosys.h" />
     <ClInclude Include="combase.h" />
+    <ClInclude Include="DriverController.h" />
+    <ClInclude Include="DriverInfo.h" />
+    <ClInclude Include="FileController.h" />
     <ClInclude Include="ginclude.h" />
     <ClInclude Include="iasiodrv.h" />
     <ClInclude Include="wxdebug.h" />

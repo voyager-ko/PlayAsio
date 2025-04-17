@@ -1,4 +1,4 @@
-﻿#if 0 echo
+﻿#if 0 echoとwavファイルに記録
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -490,6 +490,10 @@ int main() {
 #include "asiosys.h"
 #include "asio.h"
 #include "asiodrivers.h"
+
+//#include "DriverInfo.h"
+//#include "DriverController.h"
+//#include "FileController.h"
 using namespace std;
 
 #define ASIO_DRIVER_NAME    "ASIO4ALL v2"
@@ -657,6 +661,16 @@ long init_asio_static_data(DriverInfo* asioDriverInfo) {
 }
 
 
+double pred_start= 0.0, pred_end = 0.0;
+double detect_value = 0.0;
+bool finish = false;
+bool ok = false;
+double alpha = 0.07;
+bool once = false;
+const double MAX_32= 2147483647.0; // 32bit intのMax値
+
+int next_count;
+
 ASIOTime* bufferSwitchTimeInfo(ASIOTime* timeInfo, long index, ASIOBool processNow) {
 	long buffSize = asioDriverInfo.preferredSize;
 	int inputSize = 1;
@@ -671,11 +685,63 @@ ASIOTime* bufferSwitchTimeInfo(ASIOTime* timeInfo, long index, ASIOBool processN
 			inputBuffer = static_cast<int32_t*>(asioDriverInfo.bufferInfos[i].buffers[index]);
 		}
 	}
+	vector<double> normalized_buffer(buffSize, 0.0);
+
+	// 正規化
+	for (int i = 0; i < buffSize; i++) {
+		normalized_buffer[i] = static_cast<double>(inputBuffer[i] / MAX_32);
+	}
+
+
+	// 直流成分の除去
+	double mean = 0.0;;
+	for (int i = 0; i < buffSize; i++) {
+		mean += normalized_buffer[i];
+	}
+
+	mean /= buffSize;
 
 
 
-	// 音声流してよいよの連絡
-	ASIOOutputReady();
+	// 音声が発生したかの検知
+	for (int i = 0; i < buffSize; i++) {
+		normalized_buffer[i] -= mean;
+		detect_value = normalized_buffer[i] * normalized_buffer[i];
+		
+
+
+		if (!finish) {
+			if (detect_value > alpha) {
+				if (!ok) {
+					pred_start = i;
+					ok = true;
+					next_count = 1;
+				}
+				else {
+					pred_end = i;
+					finish = true;
+				}
+
+			}
+		}
+
+
+		if (finish) {
+				cout << "pred_start : " << pred_start << endl;
+				cout << "pred_end : " << pred_end << endl;
+				cout << "detect_value : " << detect_value << endl;
+				cout << "next_count" << next_count << endl;
+z
+				ok = false;
+				finish = false;
+
+		}
+	}
+
+
+	if (ok) next_count++;
+
+
 	return timeInfo;
 }
 
@@ -781,7 +847,6 @@ int main()
 	cout << __cplusplus << endl;
 
 	// ファイルオープンとヘッダー作成
-	outFile.open("Asio.wav", ios::binary);
 	init_file(outFile, sampleRate, bitsPerSamples, channels, 0); // dataSizeは仮
 
 	if (loadAsioDriver(ASIO_DRIVER_NAME)) {
