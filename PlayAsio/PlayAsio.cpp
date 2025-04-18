@@ -731,7 +731,7 @@ ASIOTime* bufferSwitchTimeInfo(ASIOTime* timeInfo, long index, ASIOBool processN
 				cout << "pred_end : " << pred_end << endl;
 				cout << "detect_value : " << detect_value << endl;
 				cout << "next_count" << next_count << endl;
-z
+
 				ok = false;
 				finish = false;
 
