@@ -1,4 +1,4 @@
-﻿#if 0 echoとwavファイルに記録
+﻿#if 1 echoとwavファイルに記録
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -480,7 +480,7 @@ int main() {
 }
 #endif
 
-#if 1 音の検出
+#if 0 音の検出
 #include <iostream>
 #include <vector>
 #include <fstream>
